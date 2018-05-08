@@ -4,13 +4,16 @@ output:
   html_document:
     keep_md: true
 ---
-
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(fig.width=12, fig.height=8, fig.path='figure/',
+                      echo=TRUE, warning=FALSE, message=FALSE)
+```
 
 ## Loading and preprocessing the data
 1. Load the data (i.e. read.csv())
 
 
-```{r, echo=TRUE}
+```{r figure_1, echo=TRUE}
 activity <- read.csv("activity.csv")
 ```
 
@@ -20,7 +23,7 @@ activity <- read.csv("activity.csv")
 - Change date's class to Date using as.Date
 - Change interval's class to POSIXct's time
 
-```{r, echo=TRUE}
+```{r figure_2, echo=TRUE}
 class(activity$steps)
 class(activity$date)
 class(activity$interval)
@@ -36,19 +39,19 @@ activity$interval <- substr(as.POSIXct(activity$interval, format='%H%M'), 12, 16
 
 1. Calculate the total number of steps taken per day
 
-```{r, echo=TRUE}
+```{r figure_3, echo=TRUE}
 sumsteps <- tapply(activity$steps,activity$date,sum, na.rm=TRUE)
 ```
 
 2. Make a histogram of the total number of steps taken each day
 
-``` {r, echo=TRUE}
+``` {r figure_4, echo=TRUE}
 hist(sumsteps,breaks=10)
 ```
 
 3. Calculate and report the mean and median of the total number of steps taken per day
 
-```{r, echo=TRUE}
+```{r figure_5, echo=TRUE}
 sumsteps <- tapply(activity$steps,activity$date,sum, na.rm=TRUE)
 summary(sumsteps)
 ```
@@ -57,7 +60,7 @@ summary(sumsteps)
 
 1. Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 
-```{r, echo=TRUE}
+```{r figure_6, echo=TRUE}
 intervalstep <- tapply(activity$steps,activity$interval,mean,na.rm=TRUE)
 steptime <- cbind(rownames(intervalstep),data.frame(intervalstep,row.names=NULL))
 names(steptime) <- c("interval","meanstep")
@@ -70,7 +73,7 @@ plot(steptime$interval,steptime$meanstep,type="l",xlab="time interval",ylab=" av
 The interval starting from 08:35 to 08:40
 
 
-```{r, echo=TRUE}
+```{r figure_7, echo=TRUE}
 maxint <- substr(steptime[steptime$meanstep==max(steptime$meanstep),1], 12,16)
 maxint
 ```
@@ -79,13 +82,13 @@ maxint
 
 1. Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NAs)
 
-```{r, echo=TRUE}
+```{r figure_8, echo=TRUE}
 sum(is.na(activity$steps))
 ```
 
 2. Fill all of the missing values in the with the mean for that 5-minute interval.
 
-```{r, echo=TRUE}
+```{r figure_9, echo=TRUE}
 intmean <- tapply(activity$steps,activity$interval,mean, na.rm=TRUE)
 intmean2 <- cbind(rownames(intmean), data.frame(intmean,row.names=NULL))
 names(intmean2) <- c("interval","intmean")
@@ -95,7 +98,7 @@ activity2 <- merge(activity,intmean2,by="interval",all.x=TRUE)
 
 3. Create a new dataset that is equal to the original dataset but with the missing data filled in.
 
-```{r, echo=TRUE}
+```{r figure_10, echo=TRUE}
 activity2$steps <- ifelse(is.na(activity2$steps),activity2$intmean, activity2$steps)
 ```
 
@@ -103,13 +106,13 @@ activity2$steps <- ifelse(is.na(activity2$steps),activity2$intmean, activity2$st
 
 - Calculate the total number of steps taken per day
 
-```{r, echo=TRUE}
+```{r figure_11, echo=TRUE}
 sumsteps2 <- tapply(activity2$steps,activity2$date,sum, na.rm=TRUE)
 ```
 
 - Make a histogram of the total number of steps taken each day
 
-```{r, echo=TRUE}
+```{r figure_12, echo=TRUE}
 par(mfrow=c(1,2))
 hist(sumsteps,breaks=10, main="With NA", xlab="daily steps")
 hist(sumsteps2,breaks=10, main="Without NA", xlab="daily steps")
@@ -119,7 +122,7 @@ With NA replaced by the mean steps of a given interval throughout all days, ther
 
 - Calculate and report the mean and median of the total number of steps taken per day
 
-```{r, echo=TRUE}
+```{r figure_13, echo=TRUE}
 summary(sumsteps)
 summary(sumsteps2)
 ```
@@ -129,7 +132,7 @@ The mean and median increase after removing NAs.
 
 1. Create a new factor variable in the dataset with two levels - "weekday" and "weekend" indicating whether a given date is a weekday or weekend day.
 
-```{R, echo=TRUE}
+```{r figure_14, echo=TRUE}
 library(lubridate)
 activity2$day <- wday(activity2$date,label=TRUE)
 activity2$week <- ifelse(activity2$day=="Sat" | activity2$day=="Sun","weekend","weekday")
@@ -138,7 +141,7 @@ activity2$week <- as.factor(activity2$week)
 
 2. Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). See the README file in the GitHub repository to see an example of what this plot should look like using simulated data.
 
-```{R, echo=TRUE}
+```{r figure_15, echo=TRUE}
 par(mfrow=c(2,1))
 
 activity2$interval <- as.POSIXct(activity2$interval, format='%H:%M')
