@@ -70,7 +70,7 @@ sumsteps <- tapply(activity$steps,activity$date,sum, na.rm=TRUE)
 hist(sumsteps,breaks=10)
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
+![](figure/figure_4-1.png)<!-- -->
 
 3. Calculate and report the mean and median of the total number of steps taken per day
 
@@ -98,7 +98,7 @@ steptime$interval <- as.POSIXct(steptime$interval, format='%H:%M')
 plot(steptime$interval,steptime$meanstep,type="l",xlab="time interval",ylab=" average number of steps", main="Average number of steps across all days")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
+![](figure/figure_6-1.png)<!-- -->
 
 2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 
@@ -164,7 +164,7 @@ hist(sumsteps,breaks=10, main="With NA", xlab="daily steps")
 hist(sumsteps2,breaks=10, main="Without NA", xlab="daily steps")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-12-1.png)<!-- -->
+![](figure/figure_12-1.png)<!-- -->
 
 With NA replaced by the mean steps of a given interval throughout all days, there are higher frequency of data close to center (near where mean and median are), hence the distribution looks more normal
 
@@ -228,4 +228,4 @@ steptimewend$interval <- as.POSIXct(steptimewend$interval,format='%Y-%m-%d %H:%M
 plot(steptimewend$interval,steptimewend$meanstep,type="l",xlab="time interval",ylab=" average number of steps", main="Average number of steps on weekend")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-15-1.png)<!-- -->
+![](figure/figure_15-1.png)<!-- -->
